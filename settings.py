@@ -1,0 +1,3 @@
+TG_API_TOKEN = '1294653889:AAEZykOCezihgusgiXYdnTSICnUd_eEnU-Q'
+PROXY_TOKEN = {'https':'socks5://78.189.231.24:1080'}
+MY_TG_ID = '553818543'

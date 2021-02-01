@@ -1,67 +1,98 @@
 import os 
 from config import *
 
-
-
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-import HW
+import HW, exceptions
 
 bot = Bot(token=TG_API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 
 class Stater(StatesGroup):
+    auth = State()
+    attach_state = State()
     make_group = State()
     connecting = State()
     
     headman = State()
-    student = State()
+    member = State()
 
-
+                            """ АВТОРИЗАЦИЯ И СОЗДАНИЕ ГРУППЫ """
 
 @dp.message_handler(state='*',commands=['start'])
 async def send_welcome(message: types.Message):
-# """ Для не авториз. пользователя """
-    # Отправляет приветственное сообщение и помощь по боту
+""" Проверяет авторезован ли пользователь и предлагает создать группу."""
+    if  not message.chat.id in HW.member_list():
+        await message.answer('Введите имя:')
+        await Stater.auth.set()
+    else:
+        await message.answer(
+            f'Здравствуйте, {HW.get_name(message.chat.id)[0]}\n\n'
+            'Создать группу (вы станете ее старостой): /make_group\n\n'
+            'Присоеденится к группе: /connect\n'
+            )
+        await Stater.attach_state.set()
+
+
+
+@dp.message_handler(state=Stater.auth)
+async def auth(message: types.Message, state: FSMContext):
+    """ Авторизует пользователя """
+    await state.update_data({
+        'member_id':message.chat.id,
+        'member_name':message.text
+        })
+    data = await state.get_data()
+    HW.add_memder(data)
     await message.answer(
-        'Бот для удобного хранения ДЗ\n\n'
+        f'Здравствуйте, {message.text}\n\n'
         'Создать группу (вы станете ее старостой): /make_group\n\n'
         'Присоеденится к группе: /connect\n'
-     
     )
+    await Stater.attach_state.set()
 
-@dp.message_handler(commands=['make_group','connect'])
-async def state_purpose(message: types.Message):
-    await message.answer(
-        'Название группы:'
-    )
+
+@dp.message_handler(state=Stater.attach_state,commands=['make_group','connect'])
+async def attach_state(message: types.Message):
+    """ Обрабатывает команды для создания либо присоединения к группе """ 
     if message.text == '/make_group':
         await Stater.make_group.set()
     if message.text == '/connect':
         await Stater.connecting.set()
-    
-    
+
+    await message.answer(
+        'Название группы:'
+    )
 
 
 @dp.message_handler(state=Stater.make_group)
 async def make_group(message: types.Message, state: FSMContext):
-
-    await message.answer('кажется работает :)')
-
-    state.update_data({
+    await state.update_data({
         'group_name':message.text,
-        'member_id':message.chat.id,
-        'headman':True,
+        'headman':1,
         })
+    data = await state.get_data()
+    try:
+        HW.add_group(data.get('group_name'),message.chat.id)
+        # HW.update_role(data['headman'],message.chat.id)
+    except exceptions.NameAlreadyExists as e:
+        return await message.answer('Это имя занято, попробуйте еще.')
 
-  
+    await Stater.headman.set()
+    await message.answer(f'Теперь вы староста группы: {data["group_name"]}\n\n')
 
 
+                            """ ОБРАБОТЧИКИ ДЛЯ СТАРОСТЫ """
 
+                            
+# @dp.message_handler(state=Stater.make_group)
+# async def test_h(message: types.Message, state: FSMContext):
+
+    
 
 # @dp.message_handler(commands=['help'])
 # async def send_commands(message: types.Message):

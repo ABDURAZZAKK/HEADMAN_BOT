@@ -1,27 +1,37 @@
-CREATE TABLE group_list(
-    codename varchar(255) primary key
+CREATE TABLE groups(
+    name VARCHAR(30) PRIMARY KEY
     
 );
 
-CREATE TABLE member(
-    member_id varchar(50) primary key,
-    subgroup varchar(50),
-    headman boolean,
-    group_codename integer,
-    FOREIGN KEY(group_codename) REFERENCES group_list(codename)
+CREATE TABLE members(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(50)
+    
 );
 
 CREATE TABLE category(
-    codename varchar(255),
-    name varchar(255),
-    aliases text
+    codename VARCHAR(255),
+    category_name VARCHAR(255),
+    aliases TEXT
+    
     
 );
+
+CREATE TABLE member_group(
+    member_id INTEGER NOT NULL,
+    group_name VARCHAR(30) NOT NULL,
+    headman BOOLEAN DEFAULT 0,
+    FOREIGN KEY (member_id) REFERENCES members(id)
+    FOREIGN KEY (group_name) REFERENCES groups(name)
+
+);
+
  
 CREATE TABLE homework(
     id integer primary key,
     created datetime,
     category_codename integer,
+    subgroup varchar(50),
     theme text,
     raw_text text,
     FOREIGN KEY(category_codename) REFERENCES category(codename)

@@ -33,7 +33,7 @@ async def send_welcome(message: types.Message):
             'Создать группу (вы станете ее старостой): /make_group\n\n'
             'Присоеденится к группе: /connect\n'
             )
-        await Stater.attach_state.set()
+        
 
 
 
@@ -51,7 +51,7 @@ async def auth(message: types.Message, state: FSMContext):
         'Создать группу (вы станете ее старостой): /make_group\n\n'
         'Присоеденится к группе: /connect\n'
     )
-    await Stater.attach_state.set()
+    
 
 
 @dp.message_handler(state='*',commands=['make_group','connect'])

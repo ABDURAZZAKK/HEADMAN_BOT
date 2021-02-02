@@ -39,6 +39,12 @@ def add_memder(data):
 # def update_role(role,member_id):
 #     db.update('member_group',{'headman':role},member_id)
 
+def check_role(member_id):
+    cursor = db.get_cursor()
+    cursor.execute(f'SELECT headman FROM member_group WHERE member_id LIKE {member_id}')
+
+    return cursor.fetchone()[0]
+
 
 
 

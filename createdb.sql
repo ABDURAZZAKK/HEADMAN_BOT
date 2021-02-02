@@ -1,20 +1,10 @@
 CREATE TABLE groups(
     name VARCHAR(30) PRIMARY KEY
-    
 );
 
 CREATE TABLE members(
     id INTEGER PRIMARY KEY,
     name VARCHAR(50)
-    
-);
-
-CREATE TABLE category(
-    codename VARCHAR(255),
-    category_name VARCHAR(255),
-    aliases TEXT
-    
-    
 );
 
 CREATE TABLE member_group(
@@ -23,18 +13,24 @@ CREATE TABLE member_group(
     headman BOOLEAN DEFAULT 0,
     FOREIGN KEY (member_id) REFERENCES members(id)
     FOREIGN KEY (group_name) REFERENCES groups(name)
-
 );
 
- 
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(50),
+    aliases TEXT,
+    group_name VARCHAR(30),
+    FOREIGN KEY (group_name) REFERENCES groups(name)
+);
+
 CREATE TABLE homework(
-    id integer primary key,
-    created datetime,
-    category_codename integer,
-    subgroup varchar(50),
-    theme text,
-    raw_text text,
-    FOREIGN KEY(category_codename) REFERENCES category(codename)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    category INTEGER,
+    created_date DATETIME,
+    FOREIGN KEY(category) REFERENCES category(id)
 );
+
+
 
 -- CREATE TABLE attached_file();

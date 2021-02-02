@@ -14,18 +14,16 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 class Stater(StatesGroup):
     auth = State()
-    attach_state = State()
     make_group = State()
     connecting = State()
     
-    headman = State()
     member = State()
 
-                            """ АВТОРИЗАЦИЯ И СОЗДАНИЕ ГРУППЫ """
+                            #  """АВТОРИЗАЦИЯ И СОЗДАНИЕ ГРУППЫ"""
 
 @dp.message_handler(state='*',commands=['start'])
 async def send_welcome(message: types.Message):
-""" Проверяет авторезован ли пользователь и предлагает создать группу."""
+    """Проверяет авторезован ли пользователь и предлагает создать группу."""
     if  not message.chat.id in HW.member_list():
         await message.answer('Введите имя:')
         await Stater.auth.set()
@@ -56,7 +54,7 @@ async def auth(message: types.Message, state: FSMContext):
     await Stater.attach_state.set()
 
 
-@dp.message_handler(state=Stater.attach_state,commands=['make_group','connect'])
+@dp.message_handler(state='*',commands=['make_group','connect'])
 async def attach_state(message: types.Message):
     """ Обрабатывает команды для создания либо присоединения к группе """ 
     if message.text == '/make_group':
@@ -82,32 +80,54 @@ async def make_group(message: types.Message, state: FSMContext):
     except exceptions.NameAlreadyExists as e:
         return await message.answer('Это имя занято, попробуйте еще.')
 
-    await Stater.headman.set()
-    await message.answer(f'Теперь вы староста группы: {data["group_name"]}\n\n')
+    await Stater.member.set()
+    await message.answer(f'Теперь вы староста группы: {data["group_name"]}\n\n'
+                          'Вы можете:\n'
+                          "Добавить предмет: /add_subjects\n"
+                          "Добавить ДЗ: /add_hw\n"
+                          "Изменить расписание: /timetable\n\n"
+                          'Узнать:\n'
+                          'Расписание на завтра: /tmr\n'
+                          'Расписание на сегодня: /now\n'
+                          'Список предметов: /subjects\n'
+                          'Актуальное дз: Философия\n'
+                          'Дз по посленим 3 парам: \n/3ls Философия\n'
+                          'Дз за все время: /all Философия\n'
+                          'Книга жалоб и предложений: \n/devlop_pituh\n'
+                          )
 
 
-                            """ ОБРАБОТЧИКИ ДЛЯ СТАРОСТЫ """
+                            # """ ОБРАБОТЧИКИ ДЛЯ СТАРОСТЫ """
 
                             
-# @dp.message_handler(state=Stater.make_group)
+# @dp.message_handler(state=Stater.member)
 # async def test_h(message: types.Message, state: FSMContext):
 
     
 
-# @dp.message_handler(commands=['help'])
-# async def send_commands(message: types.Message):
-""" Вывод команд  """
-#     # Отправляет приветственное сообщение и помощь по боту
-#     await message.answer(
-#         'Бот для удобного хранения ДЗ\n\n'
-#         'Расписание на завтра: /tmr'
-#         'Расписание на сегодня: /now'
-#         'Список предметов: /subjects\n'
-#         'Актуальное дз: Философия\n'
-#         'Дз по посленим 3 парам: \n/3ls Философия\n'
-#         'Дз за все время: /all Философия\n'
-#         'Книга жалоб и предложений: \n/devlop_pituh\n'
-#     )
+@dp.message_handler(state=Stater.member,commands=['help'])
+async def send_commands(message: types.Message):
+    """ Вывод доступных команд  """    
+    headman_comds = ("Добавить предмет: /add_subjects\n"
+                    "Добавить ДЗ: /add_hw\n"
+                    "Изменить расписание: /timetable\n\n"
+                    )
+                          
+    member_comds = ('Расписание на завтра: /tmr\n'
+                    'Расписание на сегодня: /now\n'
+                    'Список предметов: /subjects\n'
+                    'Актуальное дз: Философия\n'
+                    'Дз по посленим 3 парам: \n/3ls Философия\n'
+                    'Дз за все время: /all Философия\n\n'
+                    'Создать группу новую группу: /make_group\n'
+                    'Присоеденится к группе: /connect\n'
+                    'Книга жалоб и предложений: \n/devlop_pituh\n'
+                    )
+
+    if HW.check_role(message.chat.id):
+        await message.answer(str(headman_comds)+str(member_comds))
+    else:
+        await message.answer(str(member_comds))
 
 
 

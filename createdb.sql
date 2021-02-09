@@ -4,7 +4,8 @@ CREATE TABLE groups(
 
 CREATE TABLE members(
     id INTEGER PRIMARY KEY,
-    name VARCHAR(50)
+    name VARCHAR(50),
+    active_group VARCHAR(30) DEFAULT 0
 );
 
 CREATE TABLE member_group(

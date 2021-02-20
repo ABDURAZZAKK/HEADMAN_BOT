@@ -26,9 +26,10 @@ CREATE TABLE category(
 
 CREATE TABLE homework(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
+    exercise TEXT,
     category INTEGER,
     created_date DATETIME,
+    file_path TEXT,
     FOREIGN KEY(category) REFERENCES category(id)
 );
 

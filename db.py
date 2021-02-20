@@ -47,7 +47,7 @@ def fetchall(table: str, columns: List[str]) -> List[Tuple]:
 #         )
 #     conn.commit()
 
-def update_active_group(table: str, column_values: Dict, whom: int):
+def update_active_group(table: str,  whom: int, column_values: Dict):
     columns = "".join(column_values.keys())
     values = [tuple(column_values.values())]
     cursor.executemany(
@@ -58,7 +58,11 @@ def update_active_group(table: str, column_values: Dict, whom: int):
     conn.commit()
     
 
-
+def delete_many_to_many(table: str, whom: int, group_name: str) -> None:
+    whom = int(whom)
+    cursor.execute(f"""delete from {table} where member_id={whom} and 
+                    group_name='{group_name}' """)
+    conn.commit()
 
 
 def delete(table: str, row_id: int) -> None:

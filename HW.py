@@ -36,6 +36,7 @@ def add_memder(data):
     })
 
 def connect(member_id, group_name):
+    """ Добавляет участника в группу """
     try:
         get_role(member_id, group_name)
     except:
@@ -49,6 +50,7 @@ def connect(member_id, group_name):
 
 
 def add_category(data):
+    """ Добавляет новый предмет(категорию) """
     db.insert('category',{
         'name':data['category_name'],
         'aliases':data['aliases'],
@@ -57,6 +59,7 @@ def add_category(data):
 
 
 def add_hw(member_id: int, raw: str ):
+    """ Добавляет новое ДЗ """
     parsed_message = _parse_exercise(member_id, raw)
     db.insert(
         'homework',{
@@ -68,6 +71,7 @@ def add_hw(member_id: int, raw: str ):
 
 
 def leave_group(member_id, group_name):
+    """ Удаляет участника из группы """
     db.delete_many_to_many('member_group', member_id, group_name)
 
 
@@ -92,20 +96,31 @@ def get_role(member_id, group_name):
 
 
 def get_active_group(member_id):
+    """ Возвращает активную группу участника """
     cursor = db.get_cursor()
     cursor.execute(f'SELECT active_group FROM members WHERE id LIKE {member_id}')
     return cursor.fetchone()[0]
 
 
 def group_list():
-    "Возвращает list() с именами групп"
+    "Возвращает list() с именами всех групп"
     cursor = db.get_cursor()
     cursor.execute(f'SELECT name FROM groups')
     result = [x[0] for x in cursor.fetchall()]
     return result
 
 
+def get_schedule(member_id, day, week_day):
+    group_name = get_active_group(member_id)
+       
+    cursor = db.get_cursor()
+    cursor.execute(f'SELECT id, day_w, {week_day} FROM schedule WHERE group_name LIKE "{group_name}" AND day_w LIKE {day}')
+     
+    return cursor.fetchall()
+
+
 def personal_groups(member_id):
+    """ Возвращает для участника все его группы и статус в них """
     cursor = db.get_cursor()
     cursor.execute(f'SELECT group_name, headman FROM member_group WHERE member_id LIKE {member_id}')
     result = cursor.fetchall()
@@ -122,6 +137,7 @@ def member_list():
 
 
 def category_list(group_name):
+    """ Возвращает все категории конкретной группы """
     cursor = db.get_cursor()
     cursor.execute(f'SELECT name, aliases, id FROM category WHERE group_name LIKE "{group_name}"')
     result = cursor.fetchall()
@@ -129,33 +145,74 @@ def category_list(group_name):
 
 
 def last_hw(member_id, category_name, limit=1):
-    
-    # categories = category_list(group_name)
-    # for i in categories:
-    #     if category_name.lower() in ', '.join([i[0],i[1]]).split(', '):
-    #         category_id = i[2]
-
+    """Возвращает N-ное количество заданий """ 
     category_id = _get_category_id(member_id, category_name)
     cursor = db.get_cursor()
     cursor.execute(f"""SELECT id, exercise, created_date FROM homework 
                     WHERE category={category_id} order by created_date desc limit {limit}""")
     return cursor.fetchall()
-    # raise exceptions.CategoryNotFound("Предмет не найден.")
-    
 
-# def _parse_message()
+
+    
+def change_schedule(member_id, raw):
+    group_name = get_active_group(member_id)
+    mess = _parse_schedule(raw)
+    sh = get_schedule(member_id, mess['day_w'], mess['parity'])
+    if len(sh) == 0:
+        db.insert(
+            "schedule",{
+                "day_w":mess['day_w'],
+                mess['parity']:mess['sh'],
+                "group_name":group_name
+            })
+    else:
+        db.update_schedule('schedule',mess['parity'],mess['sh'],sh[0][0])
+
+    return mess['strday']
+
+
+def _parse_schedule(raw):
+    now_week = get_week()
+    mess = raw.split('::')
+    week_days = [
+        "понедельник",
+        "вторник",
+        "среду",
+        "четверг",
+        "пятницу",
+        "субботу",
+        "воскресенье"
+    ]
+    if len(mess) != 3:
+        raise exceptions.ValidationError('Неверный формат сообщения. Попробуйте еще')
+    if int(mess[1]) > 7 or int(mess[1]) < 1:
+        raise exceptions.ValidationError('Ввеидите день недели от 1 до 7\n '
+                                        '1 - Понедельник\n 7 - Воскресенье')
+    s = ''
+    if  mess[0].lstrip().rstrip() == '+' :
+        s = 'odd_week' if now_week[1]%2 else 'even_week'
+    elif mess[0].lstrip().rstrip() == '-':
+        s = 'even_week' if now_week[1]%2 else 'odd_week'
+    
+    if s == '':
+        raise exceptions.ValidationError('Неверный формат сообщения. Попробуйте еще')
+
+    
+    return {'day_w':int(mess[1]),'parity':s, 'sh':mess[2], 'strday':week_days[int(mess[1])-1]}
 
 
 def _parse_exercise(member_id, raw):
+    """Парсит задание возвражает ID категории и текст задания"""
     category_id = _get_category_id(member_id, raw.split('::')[0] )
     exercise = raw.split('::')[1]
     return Message(category_id=category_id, exercise=exercise)
     
     
 def _get_category_id(member_id, category_name):
+    """Возвращает ID категории """ 
     categories = category_list(get_active_group(member_id))
     for i in categories:
-        if category_name.lower() in ', '.join([i[0],i[1]]).split(', '):
+        if category_name.lower() in list(map(lambda s: s.lstrip().rstrip().lower(),', '.join([i[0],i[1]]).split(', '))):
             return i[2]
     raise exceptions.CategoryNotFound("Такого предмета нет, попробуйте еще.")
 
@@ -173,8 +230,13 @@ def _get_now_datetime() -> datetime.datetime:
     return now
    
 
+def get_week():
+    """ Возвращает кортеж (год, номер недели, день недели) пример (2021, 11, 7) """
+    return _get_now_datetime().isocalendar()
+    
 
 
+    
 
 
 

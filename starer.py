@@ -11,6 +11,7 @@ class Stater(StatesGroup):
 
     add_subjects = State()
     add_hw = State()
+    change_schedule = State()
     letter_to_developer = State()
 
     member = State()

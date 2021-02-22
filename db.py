@@ -35,17 +35,13 @@ def fetchall(table: str, columns: List[str]) -> List[Tuple]:
     return result
 
 
-# def update(table: str, column_values: Dict, whom: int):
-#     data = ''
-#     for key,value in column_values.items():
-#         data += f'{key} = "{value}", '
-#     data = data[:-2]
-#     cursor.execute(
-#         f"""UPDATE {table}
-#         SET {data}
-#         WHERE id LIKE {whom}"""
-#         )
-#     conn.commit()
+def update_schedule(table: str, key, val, whom: int):
+    cursor.execute(
+        f"""UPDATE {table}
+        SET {key} = '{val}'
+        WHERE id LIKE {whom}"""
+        )
+    conn.commit()
 
 def update_active_group(table: str,  whom: int, column_values: Dict):
     columns = "".join(column_values.keys())

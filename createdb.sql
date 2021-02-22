@@ -33,6 +33,13 @@ CREATE TABLE homework(
     FOREIGN KEY(category) REFERENCES category(id)
 );
 
-
+CREATE TABLE schedule(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day_w INTEGER,
+    even_week TEXT,
+    odd_week TEXT,
+    group_name VARCHAR(30),
+    FOREIGN KEY (group_name) REFERENCES groups(name)
+);
 
 -- CREATE TABLE attached_file();

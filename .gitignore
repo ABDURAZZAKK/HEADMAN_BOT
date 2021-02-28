@@ -1,4 +1,6 @@
 venv
-db
+db\df.db
 __pycache__
-admin_bot.py 
+.env
+handlers\__pycache__
+keyboards\__pycache__

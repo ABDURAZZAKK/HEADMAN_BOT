@@ -1,3 +1,10 @@
-TG_API_TOKEN = '1294653889:AAEZykOCezihgusgiXYdnTSICnUd_eEnU-Q'
-PROXY_TOKEN = {'https':'socks5://78.189.231.24:1080'}
-MY_TG_ID = '553818543'
+import os 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+API_TOKEN = os.getenv("API_TOKEN")
+PROXY_TOKEN = os.getenv("PROXY_TOKEN")
+PROXY_PROTOCOL = os.getenv("PROXY_PROTOCOL")
+MY_ID = int(os.getenv("MY_ID"))
+

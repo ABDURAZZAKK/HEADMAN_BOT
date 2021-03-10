@@ -3,7 +3,8 @@ from states import Stater
 import MW
 from config import MY_ID
 import exceptions
-
+from .utils import *
+from keyboards.choise_buttons import delete_hw, delete_sub
     # """ ОБРАБОТЧИКИ ДЛЯ ВСЕХ """
 
 
@@ -11,7 +12,7 @@ import exceptions
 async def send_commands(message: types.Message):
     """ Вывод доступных команд  """
     chat_id = message.chat.id
-    await message.answer(MW.get_help(chat_id, MW.get_active_group(chat_id)))
+    await message.answer(get_help(chat_id, MW.get_active_group(chat_id)))
 
 
 @dp.message_handler(state=Stater.member, commands=['group_name'])
@@ -23,7 +24,7 @@ async def send_group_name(message: types.Message):
 @dp.message_handler(state=Stater.member, commands=['group_list'])
 async def send_personal_groups(message: types.Message):
     """ Отправляет участнику список его групп  """
-    await message.answer(MW.get_personal_groups(message.chat.id))
+    await message.answer(get_personal_groups(message.chat.id))
 
 
 @dp.message_handler(state=Stater.member, commands=['leave_group'])
@@ -71,11 +72,24 @@ async def send_timetable(message: types.Message):
 @dp.message_handler(state=Stater.member, commands=['subjects'])
 async def send_category_list(message: types.Message):
     """ Отправляет сообщение список предметов участника """
-    category = MW.category_list(MW.get_active_group(message.chat.id))
-    answer_message = "Список предметов:\n\n* " +\
-        "\n* ".join([c[0]+' ('+c[1]+')' for c in category])
-    await message.answer(answer_message)
+    role = MW.get_role(message.chat.id)
+    if role:
+        category = MW.category_list(MW.get_active_group(message.chat.id))
+        await message.answer('Список предметов:')
+        for c in category: 
+            await.message.answer(c[0]+' ('+c[1]+')', reply_markup=delete_sub(c[2]))
 
+    else:
+        category = MW.category_list(MW.get_active_group(message.chat.id))
+        answer_message = "Список предметов:\n\n* " +\
+            "\n* ".join([c[0]+' ('+c[1]+')' for c in category])
+        await message.answer(answer_message)
+
+@dp.callback_query_handler(state=Stater.member, text_contains="del_hw")
+async def del_hw(call: types.CallbackQuery):
+    MW.delete('category', call.values['data'].split(':')[-1])
+    await call.message.delete_reply_markup()
+    await call.message.answer('Предмет удален.')
 
 @dp.message_handler(state=Stater.member, commands=['devlop_pituh'])
 async def state_for_latter(message: types.Message):
@@ -98,6 +112,7 @@ async def send_letter_to_developer(message: types.Message):
 async def send_last_homework(message: types.Message):
     """ Возвращает N-ное колличство ДЗ по конкретному предмету  """
     ml = message.text.split('..')
+    role = MW.get_role(message.chat.id)
     try:
         if len(ml) == 2:
             hw = MW.last_hw(message.chat.id, ml[1], int(ml[0]))
@@ -106,25 +121,36 @@ async def send_last_homework(message: types.Message):
         if not hw:
             return await message.answer("Пока ДЗ нет :)")
         for h in list(reversed(hw)):
-            await message.answer(f"""{h[1]} \n\n дата публикации:{h[2][:10]} """)
+            if role:
+                await message.answer(f"""{h[1]} \n\n дата публикации:{h[2][:10]} """,reply_markup=delete_hw(h[0]))
+            else:
+                await message.answer(f"""{h[1]} \n\n дата публикации:{h[2][:10]} """)
+            if '()' in str(h[3]):
+                for i in h[3].split('()'):
+                    await bot.send_document(message.chat.id, i)
     except exceptions.CategoryNotFound as e:
         await message.answer(str(e))
     except ValueError:
          await message.answer("Не могу понять сообщение. Напишите сообщение в формате, "
             "например:\n10..английский")
 
+@dp.callback_query_handler(state=Stater.member, text_contains="del_hw")
+async def del_hw(call: types.CallbackQuery):
+    MW.delete('homework', call.values['data'].split(':')[-1])
+    await call.message.delete_reply_markup()
+    await call.message.answer('ДЗ удалено.')
 
-@dp.message_handler(commands = ['f'])
-async def ork(message: types.Message):
-    # await Stater.test.set()
-    # await message.answer('кидай файл')
-    await bot.send_document(message.chat.id, 'BQACAgIAAxkBAAIMCGA2ikq9KgTihC9Btj1oZ0Qe4EFrAALGDAACo-C4SUKCngoGNYEdHgQ')
+# @dp.message_handler(commands = ['f'])
+# async def ork(message: types.Message):
+#     # await Stater.test.set()
+#     # await message.answer('кидай файл')
+#     await bot.send_document(message.chat.id, 'BQACAgIAAxkBAAIMCGA2ikq9KgTihC9Btj1oZ0Qe4EFrAALGDAACo-C4SUKCngoGNYEdHgQ')
 
 
 
-@dp.message_handler(state=Stater.test, content_types=['document'])
-async def save_file(message: types.Message):
-    file_id = message.document.file_id
+# @dp.message_handler(state=Stater.test, content_types=['document'])
+# async def save_file(message: types.Message):
+#     file_id = message.document.file_id
    
 
 # await bot.send_document(m_id, 'BQACAgIAAxkBAAIMCGA2ikq9KgTihC9Btj1oZ0Qe4EFrAALGDAACo-C4SUKCngoGNYEdHgQ')
@@ -140,3 +166,5 @@ async def save_file(message: types.Message):
 #     await fil.download()
 #     shutil.make_archive(p,'zip',p)
 #     shutil.rmtree(p)
+
+

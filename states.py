@@ -13,6 +13,7 @@ class Stater(StatesGroup):
     add_hw = State()
     change_schedule = State()
     letter_to_developer = State()
+    file_handler = State()
 
     member = State()
     test = State()

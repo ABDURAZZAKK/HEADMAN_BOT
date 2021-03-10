@@ -2,4 +2,3 @@ venv
 db\df.db
 __pycache__
 .env
-**.__pycache__

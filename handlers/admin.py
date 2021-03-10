@@ -5,10 +5,6 @@ import MW
 import exceptions
 
 
-@dp.message_handler(commands=['admin'])
-async def send_last_homework(message: types.Message):
-    await message.answer('admin')
-
 
 def abuad(func):
     """ Декоратор не позволяющий использовать функции всем кроме меня """

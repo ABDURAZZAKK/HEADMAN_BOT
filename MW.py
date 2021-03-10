@@ -58,13 +58,14 @@ def add_category(data):
     })
 
 
-def add_hw(member_id: int, raw: str ):
+def add_hw(member_id: int, raw: str, file_path: str):
     """ Добавляет новое ДЗ """
     parsed_message = _parse_exercise(member_id, raw)
     db.insert(
         'homework',{
             'exercise':parsed_message.exercise,
             'category':parsed_message.category_id,
+            'file_path':file_path,
             'created_date': _get_now_formatted()
         }
     )
@@ -73,6 +74,10 @@ def add_hw(member_id: int, raw: str ):
 def leave_group(member_id, group_name):
     """ Удаляет участника из группы """
     db.delete_many_to_many('member_group', member_id, group_name)
+
+
+def delete(table, row_id):
+    db.delete(table, row_id)
 
 
 def update_active_group(member_id, group_name):
@@ -87,8 +92,9 @@ def get_name(member_id):
     return cursor.fetchone()[0]
 
 
-def get_role(member_id, group_name):
+def get_role(member_id):
     "Проверяет является ли member_id админом возвращает 1 или 0"
+    group_name = get_active_group(member_id)
     cursor = db.get_cursor()
     cursor.execute(f'SELECT headman FROM member_group WHERE member_id LIKE {member_id}'
                    f' AND group_name LIKE "{group_name}"')
@@ -117,44 +123,6 @@ def get_schedule(member_id, day, week_day):
     cursor.execute(f'SELECT id, day_w, {week_day} FROM schedule WHERE group_name LIKE "{group_name}" AND day_w LIKE {day}')
      
     return cursor.fetchall()
-
-
-def get_help(chat_id, group_name):
-    """ Вывод доступных команд  """
-    headman_comds = ("Добавить предмет: /add_subjects\n"
-                     "Добавить ДЗ: /add_hw\n"
-                     "Изменить расписание: /timetable"
-                     "\n\n"
-                     )
-
-    member_comds = ('Название группы: /group_name\n'
-                    'Список ваших групп: /group_list\n'
-                    'Покиунть группу:/leave_group\n\n'
-                    'Расписание на завтра: /tmr\n'
-                    'Расписание на сегодня: /now\n'
-                    'Расписание на определенный день: /day N\n '
-                    'где N - номер дня недели от 1 до 7\n\n'
-                    'Список предметов: /subjects\n'
-                    'Последнее дз: Философия\n'
-                    'Дз по посленим N парам: \n N..Философия\n\n'
-                    'Создать новую группу: /make_group\n'
-                    'Присоеденится к группе: /connect\n\n'
-                    'Книга жалоб и предложений: \n/devlop_pituh\n'
-                    )
-
-    if get_role(chat_id, group_name):
-        return str(headman_comds)+str(member_comds)
-    else:
-        return str(member_comds)
-
-
-def get_personal_groups(member_id):
-    """ Возврашает список групп участника """
-    groups = personal_groups(member_id)
-    answer_message = "Список групп:\n\n* " +\
-        "\n* ".join([c[0]+' - '+'староста.' if c[1] else 
-                    c[0]+' - '+'участник.' for c in groups])
-    return answer_message
 
 
 def personal_groups(member_id):
@@ -186,7 +154,7 @@ def last_hw(member_id, category_name, limit=1):
     """Возвращает N-ное количество заданий """ 
     category_id = _get_category_id(member_id, category_name)
     cursor = db.get_cursor()
-    cursor.execute(f"""SELECT id, exercise, created_date FROM homework 
+    cursor.execute(f"""SELECT id, exercise,  created_date, file_path FROM homework 
                     WHERE category={category_id} order by created_date desc limit {limit}""")
     return cursor.fetchall()
 
@@ -240,7 +208,7 @@ def _parse_schedule(raw):
 
 
 def _parse_exercise(member_id, raw):
-    """Парсит задание возвражает ID категории и текст задания"""
+    """Парсит задание возвращает ID категории и текст задания"""
     category_id = _get_category_id(member_id, raw.split('::')[0] )
     exercise = raw.split('::')[1]
     return Message(category_id=category_id, exercise=exercise)

@@ -1,13 +1,9 @@
-if __name__ == '__main__':
-    from aiogram import executor
-    from handlers import dp
-    executor.start_polling(dp, skip_updates=True)
+import MW
 
-    """ Сделать возможным удалять ДЗ и категории 
-    логирование, замеры скорости работы  
-    добавить возможность прикреплять файлы к дз
-    """
 
+
+def get_help(chat_id, group_name):
+    """ Вывод доступных команд  """
     headman_comds = ("Добавить предмет: /add_subjects\n"
                      "Добавить ДЗ: /add_hw\n"
                      "Изменить расписание: /timetable"
@@ -28,3 +24,17 @@ if __name__ == '__main__':
                     'Присоеденится к группе: /connect\n\n'
                     'Книга жалоб и предложений: \n/devlop_pituh\n'
                     )
+
+    if MW.get_role(chat_id, group_name):
+        return str(headman_comds)+str(member_comds)
+    else:
+        return str(member_comds)
+
+
+def get_personal_groups(member_id):
+    """ Возврашает список групп участника """
+    groups = MW.personal_groups(member_id)
+    answer_message = "Список групп:\n\n* " +\
+        "\n* ".join([c[0]+' - '+'староста.' if c[1] else 
+                    c[0]+' - '+'участник.' for c in groups])
+    return answer_message

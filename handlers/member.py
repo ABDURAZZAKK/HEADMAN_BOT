@@ -12,7 +12,7 @@ from keyboards.choise_buttons import delete_hw, delete_sub
 async def send_commands(message: types.Message):
     """ Вывод доступных команд  """
     chat_id = message.chat.id
-    await message.answer(get_help(chat_id, MW.get_active_group(chat_id)))
+    await message.answer(get_help(chat_id))
 
 
 @dp.message_handler(state=Stater.member, commands=['group_name'])
@@ -55,14 +55,14 @@ async def send_timetable(message: types.Message):
             sh = MW.get_schedule(message.chat.id,now_week[2],s)
         elif message.text == '/tmr':
             sh = MW.get_schedule(message.chat.id,int((now_week[2]+1)%7),s)
-        elif '/day' in message.text:
-            day = int(message.text[4:])
-            if day > 7 or day < 1:
-                return await message.answer('Нет такого дня недели')
-            s = 'odd_week' if day%2 else 'even_week'
-            sh = MW.get_schedule(message.chat.id,day,s)
+        # elif '/day' in message.text:
+        #     day = int(message.text[4:])
+        #     if day > 7 or day < 1:
+        #         return await message.answer('Нет такого дня недели')
+        #     s = 'odd_week' if day%2 else 'even_week'
+        #     sh = MW.get_schedule(message.chat.id,day,s)
         sh = sh[0]
-        await message.answer(week_days[sh[1]-1] +'\n' +'\n'.join(sh[2].split(';')))
+        await message.answer(week_days[sh[1]-1] +'\n' +'\n'.join(str(sh[2]).split(';')))
     except ValueError:
         await message.answer('N должно быть числом')
     except IndexError:
@@ -77,7 +77,7 @@ async def send_category_list(message: types.Message):
         category = MW.category_list(MW.get_active_group(message.chat.id))
         await message.answer('Список предметов:')
         for c in category: 
-            await.message.answer(c[0]+' ('+c[1]+')', reply_markup=delete_sub(c[2]))
+            await message.answer(c[0]+' ('+c[1]+')', reply_markup=delete_sub(c[2]))
 
     else:
         category = MW.category_list(MW.get_active_group(message.chat.id))
@@ -85,27 +85,27 @@ async def send_category_list(message: types.Message):
             "\n* ".join([c[0]+' ('+c[1]+')' for c in category])
         await message.answer(answer_message)
 
-@dp.callback_query_handler(state=Stater.member, text_contains="del_hw")
+@dp.callback_query_handler(state=Stater.member, text_contains="del_sub")
 async def del_hw(call: types.CallbackQuery):
     MW.delete('category', call.values['data'].split(':')[-1])
     await call.message.delete_reply_markup()
     await call.message.answer('Предмет удален.')
 
-@dp.message_handler(state=Stater.member, commands=['devlop_pituh'])
-async def state_for_latter(message: types.Message):
-    """ переводит в состояние для отправки сообщения разработчику """
-    await message.answer('Сообщение разработчику:')
-    await Stater.letter_to_developer.set()
+# @dp.message_handler(state=Stater.member, commands=['devlop_pituh'])
+# async def state_for_latter(message: types.Message):
+#     """ переводит в состояние для отправки сообщения разработчику """
+#     await message.answer('Сообщение разработчику:')
+#     await Stater.letter_to_developer.set()
 
 
-@dp.message_handler(state=Stater.letter_to_developer)
-async def send_letter_to_developer(message: types.Message):
-    """ отправляет сообщение разработчику """
-    await bot.send_message(MY_ID, f'{message.text} \n\nот '
-                           f'{MW.get_name(message.chat.id), message.chat.id}'
-                           f'\nиз группы: {MW.get_active_group( message.chat.id)}')
-    await Stater.member.set()
-    await message.answer('Спасибо за отзыв')
+# @dp.message_handler(state=Stater.letter_to_developer)
+# async def send_letter_to_developer(message: types.Message):
+#     """ отправляет сообщение разработчику """
+#     await bot.send_message(MY_ID, f'{message.text} \n\nот '
+#                            f'{MW.get_name(message.chat.id), message.chat.id}'
+#                            f'\nиз группы: {MW.get_active_group( message.chat.id)}')
+#     await Stater.member.set()
+#     await message.answer('Спасибо за отзыв')
 
 
 @dp.message_handler(state=Stater.member)
@@ -126,7 +126,7 @@ async def send_last_homework(message: types.Message):
             else:
                 await message.answer(f"""{h[1]} \n\n дата публикации:{h[2][:10]} """)
             if '()' in str(h[3]):
-                for i in h[3].split('()'):
+                for i in h[3].rstrip('()').split('()'):
                     await bot.send_document(message.chat.id, i)
     except exceptions.CategoryNotFound as e:
         await message.answer(str(e))

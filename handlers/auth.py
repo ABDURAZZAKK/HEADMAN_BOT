@@ -2,8 +2,11 @@ from loader import dp, types, bot
 from states import Stater
 import MW
 import exceptions
+import logging
 from .utils import *
    #  """АВТОРИЗАЦИЯ И СОЗДАНИЕ ГРУППЫ"""
+
+
 
 @dp.message_handler(state='*', commands=['start'])
 async def send_welcome(message: types.Message):
@@ -81,5 +84,5 @@ async def make_group(message: types.Message):
     MW.update_active_group(chat_id, message.text)
     await Stater.member.set()
     await message.answer(f'Теперь вы староста группы: {message.text}\n\n' +
-                         get_help(chat_id, message.text)
+                         get_help(chat_id)
                          )

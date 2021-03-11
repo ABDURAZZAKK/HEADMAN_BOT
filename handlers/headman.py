@@ -108,7 +108,10 @@ async def skip_add_file(call: types.CallbackQuery, state=FSMContext):
 @dp.callback_query_handler(state=Stater.add_hw ,text='add_file')
 async def send_add_file(call: types.CallbackQuery, state=FSMContext):
     await Stater.file_handler.set()
-    await call.message.answer('кидай файлы:')
+    photo = open('help_photo\help_for_add_file.jpg','rb')
+    await bot.send_photo(call.message.chat.id, photo)
+    photo.close()
+    await call.message.answer('Отправте файлы из раздела "Файл":',reply_markup=stop_button('Отмена'))
 
 
 @dp.message_handler(state=Stater.file_handler, content_types=['document'])
@@ -116,7 +119,7 @@ async def hand_file(message: types.Message, state=FSMContext):
     file_id = message.document.file_id
     data = await state.get_data()
     await state.update_data(file_path=data.get('file_path')+file_id+'()')
-    await message.answer('файл добавлен.', reply_markup=stop_button)
+    await message.answer('файл добавлен.', reply_markup=stop_button('Стоп'))
 
 
 @dp.callback_query_handler(state=Stater.file_handler ,text='stop')
@@ -134,4 +137,4 @@ async def send_add_file(call: types.CallbackQuery, state=FSMContext):
 
 @dp.message_handler(state=Stater.file_handler)
 async def send_error(message: types.Message):
-    await message.answer("это не документ.")
+    await message.answer("это не документ.",reply_markup=stop_button('Отмена'))

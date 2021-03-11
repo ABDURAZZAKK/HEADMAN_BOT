@@ -1,7 +1,5 @@
 import datetime
-
 import pytz
-
 from db import db
 import exceptions
 from typing import List, NamedTuple, Optional
@@ -37,14 +35,28 @@ def add_memder(data):
 
 def connect(member_id, group_name):
     """ Добавляет участника в группу """
-    try:
-        get_role(member_id, group_name)
-    except:
+    # try:
+    #     role = get_role(member_id)
+    #     if type(role) == int:
+    #         print(role)
+    #         update_active_group(member_id, group_name)
+    # except:
+    #     db.insert('member_group',{
+    #         'member_id':member_id,
+    #         'group_name':group_name,
+    #         'headman':0
+    #     })
+    #     update_active_group(member_id, group_name)
+    groups = personal_groups(member_id)
+    if group_name in [x[0] for x in groups]:
+        update_active_group(member_id, group_name)
+    else:
         db.insert('member_group',{
-            'member_id':member_id,
-            'group_name':group_name,
-            'headman':0
+        'member_id':member_id,
+        'group_name':group_name,
+        'headman':0
         })
+        update_active_group(member_id, group_name)
 
     
 

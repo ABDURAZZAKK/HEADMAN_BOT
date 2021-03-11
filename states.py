@@ -15,5 +15,7 @@ class Stater(StatesGroup):
     letter_to_developer = State()
     file_handler = State()
 
+    answer = State()
+
     member = State()
     test = State()

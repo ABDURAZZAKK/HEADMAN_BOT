@@ -18,14 +18,15 @@ state_back_butt = InlineKeyboardMarkup(
         ]
     ]
 )
-
-stop_button = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text='Стоп', callback_data='stop')
+def stop_button(text):
+    stop_butto = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=text, callback_data='stop')
+            ]
         ]
-    ]
-)
+    )
+    return stop_butto
 
 
 def delete_hw(row_id):
@@ -47,3 +48,14 @@ def delete_sub(row_id):
         ]
     ) 
     return del_sub
+
+
+def answer_the_mess(chat_id):
+    answer = InlineKeyboardMarkup(
+        inline_keyboard=[
+                [
+                    InlineKeyboardButton(text='Ответить', callback_data=f'answer:{chat_id}')
+                ]
+            ]
+        ) 
+    return answer

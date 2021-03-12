@@ -59,3 +59,12 @@ def answer_the_mess(chat_id):
             ]
         ) 
     return answer
+
+leave_button = InlineKeyboardMarkup(
+        inline_keyboard=[
+                [
+                    InlineKeyboardButton(text='ДА', callback_data="leave"),
+                    InlineKeyboardButton(text='НЕТ', callback_data="no_leave")
+                ]
+            ]
+        )  

@@ -2,9 +2,17 @@ from loader import dp, types, bot
 from states import Stater
 import MW
 import exceptions
-import logging
 from .utils import *
+import logging
+import logging.config
+
    #  """АВТОРИЗАЦИЯ И СОЗДАНИЕ ГРУППЫ"""
+
+
+# logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
 
 
 
@@ -15,6 +23,7 @@ async def send_welcome(message: types.Message):
     if not chat_id in MW.member_list():
         await message.answer('Введите имя:')
         await Stater.auth.set()
+        logger.info("Новый пользователь.")
     else:
         await message.answer(
             f'Здравствуйте, {MW.get_name(chat_id)}\n\n'
@@ -38,6 +47,8 @@ async def attach_state(message: types.Message):
 
         if message.text == '/group_list':
             await message.answer(get_personal_groups(message.chat.id))
+            logger.info('%s used the command /group_list', message.chat.id)
+            """ Отправляет участнику список его групп  """
 
     else:
         await message.answer('Введите команду: /start')
@@ -63,6 +74,7 @@ async def auth(message: types.Message):
 @dp.message_handler(state=Stater.connecting)
 async def connecting(message: types.Message):
     """ Подключает участника к группе """
+    logger.info('%s changed the group', message.chat.id)
     if message.text in MW.group_list():
         MW.connect(message.chat.id, message.text)
         MW.update_active_group(message.chat.id, message.text)
@@ -77,9 +89,11 @@ async def connecting(message: types.Message):
 async def make_group(message: types.Message):
     """ Создает новую группу и подключает к ней участника """
     chat_id = message.chat.id
+    logger.info('%s created a new group', chat_id)
     try:
         MW.add_group(chat_id, message.text)
     except exceptions.NameAlreadyExists as e:
+        logger.error('%s tried to create an existing group')
         return await message.answer(str(e))
     MW.update_active_group(chat_id, message.text)
     await Stater.member.set()

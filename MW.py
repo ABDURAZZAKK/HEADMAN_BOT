@@ -92,6 +92,12 @@ def delete(table, row_id):
     db.delete(table, row_id)
 
 
+def there_is_hw(sub_id):
+    cursor = db.get_cursor()
+    cursor.execute(f'SELECT id FROM homework WHERE category LIKE {sub_id}')
+    return cursor.fetchall()
+
+
 def update_active_group(member_id, group_name):
     'Обновляет активную группу(группу с которой можно взаимод.) пользователя'
     db.update_active_group('members', member_id, {'active_group':group_name})

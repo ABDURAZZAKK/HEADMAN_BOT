@@ -4,37 +4,56 @@ import MW
 from config import MY_ID
 import exceptions
 from .utils import *
-from keyboards.choise_buttons import delete_hw, delete_sub
+from keyboards.choise_buttons import delete_hw, delete_sub, leave_button
     # """ ОБРАБОТЧИКИ ДЛЯ ВСЕХ """
+import logging
+import logging.config
+
+
+logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
+
 
 
 @dp.message_handler(state=Stater.member, commands=['help'])
 async def send_commands(message: types.Message):
     """ Вывод доступных команд  """
     chat_id = message.chat.id
+    logger.info('%s used the command /help', chat_id)
     await message.answer(get_help(chat_id))
 
 
 @dp.message_handler(state=Stater.member, commands=['group_name'])
 async def send_group_name(message: types.Message):
     """ Отправляет участнику группу в которой он находится """
+    logger.info('%s used the command /group_name',message.chat.id) 
     await message.answer(MW.get_active_group(message.chat.id))
-
-
-@dp.message_handler(state=Stater.member, commands=['group_list'])
-async def send_personal_groups(message: types.Message):
-    """ Отправляет участнику список его групп  """
-    await message.answer(get_personal_groups(message.chat.id))
 
 
 @dp.message_handler(state=Stater.member, commands=['leave_group'])
 async def leave_group(message: types.Message):
     """ Команда  чтобы покинуть группу """
     group_name = MW.get_active_group(message.chat.id)
-    MW.leave_group(message.chat.id, group_name)
-    MW.update_active_group(message.chat.id, 0)
+    await message.answer(f'Вы действительно хотите покинуть группу: {group_name} ?', reply_markup=leave_button)
+
+
+@dp.callback_query_handler(state=Stater.member ,text='leave')
+async def send_leave(call: types.CallbackQuery):
+    
+    group_name = MW.get_active_group(call.message.chat.id)
+    logger.info('%s leave_group: %s',call.message.chat.id, group_name)
+    MW.leave_group(call.message.chat.id, group_name)
+    MW.update_active_group(call.message.chat.id, 0)
+    await call.message.edit_reply_markup()
     await Stater.any_state.set()
-    await message.answer(f'Вы покинули группу: {group_name}')
+    await call.message.answer(f'Вы покинули группу: {group_name} \nПрисоеденитесь к группе: '
+                            '/connect \nИли создайте новую: /make_group')
+
+
+@dp.callback_query_handler(state=Stater.member ,text='no_leave')
+async def send_no_leave(call: types.CallbackQuery):
+    await call.message.edit_reply_markup()
 
 
 @dp.message_handler(state=Stater.member, commands=['now','tmr','day'])
@@ -63,6 +82,7 @@ async def send_timetable(message: types.Message):
         #     sh = MW.get_schedule(message.chat.id,day,s)
         sh = sh[0]
         await message.answer(week_days[sh[1]-1] +'\n' +'\n'.join(str(sh[2]).split(';')))
+        logger.info('%s found out the schedule',message.chat.id)
     except ValueError:
         await message.answer('N должно быть числом')
     except IndexError:
@@ -72,6 +92,7 @@ async def send_timetable(message: types.Message):
 @dp.message_handler(state=Stater.member, commands=['subjects'])
 async def send_category_list(message: types.Message):
     """ Отправляет сообщение список предметов участника """
+    logger.info('%s used the command /subjects',message.chat.id)
     role = MW.get_role(message.chat.id)
     if role:
         category = MW.category_list(MW.get_active_group(message.chat.id))
@@ -87,7 +108,15 @@ async def send_category_list(message: types.Message):
 
 @dp.callback_query_handler(state=Stater.member, text_contains="del_sub")
 async def del_hw(call: types.CallbackQuery):
-    MW.delete('category', call.values['data'].split(':')[-1])
+    sub_id = call.values['data'].split(':')[-1]
+    logger.info('%s deleted subject',call.message.chat.id)
+    hws = MW.there_is_hw(sub_id)
+    if not hws:
+        MW.delete('category', sub_id)
+    else:
+        for x in hws:
+            MW.delete('homework', x[0])
+        MW.delete('category', sub_id)
     await call.message.delete_reply_markup()
     await call.message.answer('Предмет удален.')
 
@@ -113,9 +142,11 @@ async def send_last_homework(message: types.Message):
     """ Возвращает N-ное колличство ДЗ по конкретному предмету  """
     ml = message.text.split('..')
     role = MW.get_role(message.chat.id)
+    
     try:
         if len(ml) == 2:
             hw = MW.last_hw(message.chat.id, ml[1], int(ml[0]))
+            logger.info('%s learned homework',message.chat.id)
         else:
             hw = MW.last_hw(message.chat.id, message.text)
         if not hw:
@@ -136,6 +167,7 @@ async def send_last_homework(message: types.Message):
 
 @dp.callback_query_handler(state=Stater.member, text_contains="del_hw")
 async def del_hw(call: types.CallbackQuery):
+    logger.info('%s deleted homework',message.chat.id) 
     MW.delete('homework', call.values['data'].split(':')[-1])
     await call.message.delete_reply_markup()
     await call.message.answer('ДЗ удалено.')

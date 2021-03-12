@@ -3,7 +3,12 @@ from states import Stater
 import MW
 import exceptions
 from keyboards.choise_buttons import add_file, state_back_butt, stop_button
+import logging
+import logging.config
 
+
+logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
 
 
 
@@ -42,6 +47,7 @@ async def give_permission(message: types.Message):
                             )
 
     else: 
+        logger.info('%s was given to understand who the cock is', message.chat.id)
         await message.answer('Ты не староста, ты питух - твое место у параши')
 
 
@@ -58,6 +64,7 @@ async def add_subjects(message: types.Message):
     }
     MW.add_category(data)
     await Stater.member.set()
+    logger.info('%s created a new subject')
     await message.answer('Предмет добавлен')
 
 
@@ -101,6 +108,7 @@ async def skip_add_file(call: types.CallbackQuery, state=FSMContext):
         return await call.message.answer(str(e))
     await state.finish()
     await Stater.member.set()
+    logger.info('%s created a new homework without files', call.message.chat.id)
     await call.message.answer(text='Задание добавлено.')
     await call.message.edit_reply_markup()
 
@@ -131,10 +139,12 @@ async def send_add_file(call: types.CallbackQuery, state=FSMContext):
         return await call.message.answer(str(e))
     await state.finish()
     await Stater.member.set()
+    logger.info('%s created a new homework with files', call.message.chat.id)
     await call.message.answer(text='Задание добавлено.')
     await call.message.edit_reply_markup()
 
 
 @dp.message_handler(state=Stater.file_handler)
 async def send_error(message: types.Message):
+    logger.info('%s is dumb')
     await message.answer("это не документ.",reply_markup=stop_button('Отмена'))

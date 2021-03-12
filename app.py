@@ -3,9 +3,8 @@ if __name__ == '__main__':
     from handlers import dp
     executor.start_polling(dp, skip_updates=True)
 
-    """ Сделать возможным удалять ДЗ и категории 
-    логирование, замеры скорости работы  
-    добавить возможность прикреплять файлы к дз
+    """ 
+      
     """
 
     headman_comds = ("Добавить предмет: /add_subjects\n"

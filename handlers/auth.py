@@ -23,7 +23,7 @@ async def send_welcome(message: types.Message):
     if not chat_id in MW.member_list():
         await message.answer('Введите имя:')
         await Stater.auth.set()
-        logger.info("Новый пользователь.")
+        logger.info("New member.")
     else:
         await message.answer(
             f'Здравствуйте, {MW.get_name(chat_id)}\n\n'
@@ -74,7 +74,7 @@ async def auth(message: types.Message):
 @dp.message_handler(state=Stater.connecting)
 async def connecting(message: types.Message):
     """ Подключает участника к группе """
-    logger.info('%s changed the group', message.chat.id)
+    logger.info('%s changed the group to: %s', message.chat.id, message.text)
     if message.text in MW.group_list():
         MW.connect(message.chat.id, message.text)
         MW.update_active_group(message.chat.id, message.text)
@@ -89,12 +89,12 @@ async def connecting(message: types.Message):
 async def make_group(message: types.Message):
     """ Создает новую группу и подключает к ней участника """
     chat_id = message.chat.id
-    logger.info('%s created a new group', chat_id)
     try:
         MW.add_group(chat_id, message.text)
     except exceptions.NameAlreadyExists as e:
         logger.error('%s tried to create an existing group')
         return await message.answer(str(e))
+    logger.info('%s created a new group: %s', chat_id, message.text)
     MW.update_active_group(chat_id, message.text)
     await Stater.member.set()
     await message.answer(f'Теперь вы староста группы: {message.text}\n\n' +

@@ -47,8 +47,7 @@ async def give_permission(message: types.Message):
                             )
 
     else: 
-        logger.info('%s was given to understand who the cock is', message.chat.id)
-        await message.answer('Ты не староста, ты питух - твое место у параши')
+        await message.answer('Вы не староста')
 
 
 @dp.message_handler(state=Stater.add_subjects)
@@ -146,5 +145,5 @@ async def send_add_file(call: types.CallbackQuery, state=FSMContext):
 
 @dp.message_handler(state=Stater.file_handler)
 async def send_error(message: types.Message):
-    logger.info('%s is dumb')
+    logger.info('%s is dumb', message.chat.id)
     await message.answer("это не документ.",reply_markup=stop_button('Отмена'))

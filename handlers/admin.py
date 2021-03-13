@@ -15,7 +15,7 @@ def abuad(func):
     """ Декоратор не позволяющий использовать функции всем кроме меня """
     async def wrapper(message):
         if message.chat.id != MY_ID:
-            return await message.answer('Ты не админ, ты питух - твое место у параши')
+            return await message.answer('Вы не можете использовать эту команду')
         return await func(message)
     return wrapper
 
@@ -28,8 +28,11 @@ async def mailing(message: types.Message):
     logger.info('I made a mailing')
     answer_message = message.text[8:]
     for member_id in MW.member_list():
-        await bot.send_message(member_id, answer_message)
-
+        try:
+            await bot.send_message(member_id, answer_message)
+        except Exception as e:
+            logger.error("MailingError %s", e)
+            continue
 
 @dp.message_handler(state=Stater.member, commands=['devlop_pituh'])
 async def state_for_latter(message: types.Message):
@@ -41,7 +44,7 @@ async def state_for_latter(message: types.Message):
 @dp.message_handler(state=Stater.letter_to_developer)
 async def send_letter_to_developer(message: types.Message):
     """ отправляет сообщение разработчику """
-    logger.info("%s sent me a message", message.chat.id)
+    logger.info("%s sent me a message: %s", message.chat.id, message.text)
     chat_id = message.chat.id
     await bot.send_message(MY_ID, f'{message.text} \n\nот '
                            f'{MW.get_name(chat_id), chat_id}'

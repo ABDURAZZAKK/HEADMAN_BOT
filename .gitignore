@@ -1,4 +1,4 @@
 venv
-db\df.db
+# db\df.db
 __pycache__
 .env

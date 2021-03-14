@@ -1,0 +1,10 @@
+2021-03-14 12:00:08,210 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-14 12:00:09,374 aiogram - WARNING:Updates were skipped successfully.
+2021-03-14 12:00:09,374 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-14 12:00:36,149 handlers.auth - INFO:553818543 changed the group to: ИБ 2 курс
+2021-03-14 12:00:55,037 handlers.member - INFO:553818543 found out the schedule
+2021-03-14 12:03:40,729 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-14 12:03:41,892 aiogram - WARNING:Updates were skipped successfully.
+2021-03-14 12:03:41,892 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-14 12:03:56,558 handlers.auth - INFO:553818543 changed the group to: ИБ 2 курс
+2021-03-14 12:04:04,536 handlers.member - INFO:553818543 found out the schedule

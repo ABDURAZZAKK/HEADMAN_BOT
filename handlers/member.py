@@ -69,10 +69,12 @@ async def send_timetable(message: types.Message):
     ]
     try:
         now_week = MW.get_week()
-        s = 'odd_week' if now_week[1]%2 else 'even_week'
+        
         if message.text == '/now':
+            s = 'odd_week' if now_week[1]%2 else 'even_week'
             sh = MW.get_schedule(message.chat.id,now_week[2],s)
         elif message.text == '/tmr':
+            s = 'odd_week' if (now_week[1]+1)%2 else 'even_week'
             sh = MW.get_schedule(message.chat.id,int((now_week[2]+1)%7),s)
         # elif '/day' in message.text:
         #     day = int(message.text[4:])

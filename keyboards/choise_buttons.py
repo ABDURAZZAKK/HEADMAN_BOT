@@ -67,4 +67,14 @@ leave_button = InlineKeyboardMarkup(
                     InlineKeyboardButton(text='НЕТ', callback_data="no_leave")
                 ]
             ]
-        )  
+        )
+
+
+def connect_button(group_list):
+    connect_butt = InlineKeyboardMarkup(row_width=1)
+    for g in group_list:
+        text = g[0]+' - '+'headman.' if g[1] else g[0]+' - '+'member.'
+        button = InlineKeyboardButton(text=f'{text}', callback_data=f'connect:{g[0]}')
+        connect_butt.insert(button)
+    return connect_butt
+

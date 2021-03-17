@@ -7,7 +7,7 @@ import logging
 import logging.config
 
 
-logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logging.config.fileConfig('logs/logging.ini', disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 
@@ -46,9 +46,8 @@ async def give_permission(message: types.Message):
                             '3)ин.яз 1п/г к. 4.17;', reply_markup=state_back_butt
                             )
 
-    else: 
-        logger.info('%s was given to understand who the cock is', message.chat.id)
-        await message.answer('Ты не староста, ты питух - твое место у параши')
+    else:
+        await message.answer('You not a headman')
 
 
 @dp.message_handler(state=Stater.add_subjects)
@@ -116,7 +115,7 @@ async def skip_add_file(call: types.CallbackQuery, state=FSMContext):
 @dp.callback_query_handler(state=Stater.add_hw ,text='add_file')
 async def send_add_file(call: types.CallbackQuery, state=FSMContext):
     await Stater.file_handler.set()
-    photo = open('help_photo\help_for_add_file.jpg','rb')
+    photo = open('help_photo/help_for_add_file.jpg','rb')
     await bot.send_photo(call.message.chat.id, photo)
     photo.close()
     await call.message.answer('Отправте файлы из раздела "Файл":',reply_markup=stop_button('Отмена'))
@@ -146,5 +145,5 @@ async def send_add_file(call: types.CallbackQuery, state=FSMContext):
 
 @dp.message_handler(state=Stater.file_handler)
 async def send_error(message: types.Message):
-    logger.info('%s is dumb')
+    logger.info('%s is dumb',message.chat.id)
     await message.answer("это не документ.",reply_markup=stop_button('Отмена'))

@@ -8,7 +8,7 @@ import logging
 import logging.config
 
 
-logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logging.config.fileConfig('logs/logging.ini', disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 def abuad(func):
@@ -25,11 +25,13 @@ def abuad(func):
 @abuad
 async def mailing(message: types.Message):
     """ Рассылает сообщение всем пользователям """
-    logger.info('I made a mailing')
+    logger.info('I made a mailing: %s',message.text)
     answer_message = message.text[8:]
     for member_id in MW.member_list():
-        await bot.send_message(member_id, answer_message)
-
+        try:
+            await bot.send_message(member_id, answer_message)
+        except:
+            continue
 
 @dp.message_handler(state=Stater.member, commands=['devlop_pituh'])
 async def state_for_latter(message: types.Message):

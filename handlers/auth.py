@@ -3,6 +3,7 @@ from states import Stater
 import MW
 import exceptions
 from .utils import *
+from keyboards.choise_buttons import connect_button
 import logging
 import logging.config
 
@@ -10,7 +11,7 @@ import logging.config
 
 
 # logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
-logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logging.config.fileConfig('logs/logging.ini', disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 
@@ -43,6 +44,8 @@ async def attach_state(message: types.Message):
 
         if message.text == '/connect':
             await Stater.connecting.set()
+            group_list = MW.personal_groups(message.chat.id)
+            await message.answer("List of your groups:",reply_markup=connect_button(group_list))
             await message.answer('Название группы:')
 
         if message.text == '/group_list':
@@ -52,6 +55,16 @@ async def attach_state(message: types.Message):
 
     else:
         await message.answer('Введите команду: /start')
+
+@dp.callback_query_handler(state=Stater.connecting, text_contains='connect:')
+async def call_connect(call: types.CallbackQuery):
+    group_name = call.values['data'].split(':')[-1]
+    MW.connect(call.message.chat.id, group_name)
+    await Stater.member.set()
+    await call.message.answer(f'Вы присоеденились к группе: {group_name}\n'
+                             'Помощь: /help')
+    logger.info('%s changed the group to: %s', call.message.chat.id,group_name)
+    await call.message.delete_reply_markup()
 
 
 @dp.message_handler(state=Stater.auth)
@@ -74,27 +87,26 @@ async def auth(message: types.Message):
 @dp.message_handler(state=Stater.connecting)
 async def connecting(message: types.Message):
     """ Подключает участника к группе """
-    logger.info('%s changed the group', message.chat.id)
+    logger.info('%s changed the group to: %s', message.chat.id,message.text)
     if message.text in MW.group_list():
         MW.connect(message.chat.id, message.text)
-        MW.update_active_group(message.chat.id, message.text)
         await Stater.member.set()
         await message.answer(f'Вы присоеденились к группе: {message.text}\n'
                              'Помощь: /help')
     else:
-        await message.answer('Такой группы нет, попробуйте еще.')
+        await message.answer('Такой группы нет, попробуйте еще.\nor /make_group')
 
 
 @dp.message_handler(state=Stater.make_group)
 async def make_group(message: types.Message):
     """ Создает новую группу и подключает к ней участника """
     chat_id = message.chat.id
-    logger.info('%s created a new group', chat_id)
     try:
         MW.add_group(chat_id, message.text)
     except exceptions.NameAlreadyExists as e:
         logger.error('%s tried to create an existing group')
         return await message.answer(str(e))
+    logger.info('%s created a new group: %s', chat_id,message.text)
     MW.update_active_group(chat_id, message.text)
     await Stater.member.set()
     await message.answer(f'Теперь вы староста группы: {message.text}\n\n' +

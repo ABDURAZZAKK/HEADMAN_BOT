@@ -10,7 +10,7 @@ import logging
 import logging.config
 
 
-logging.config.fileConfig('logs\logging.ini', disable_existing_loggers=False)
+logging.config.fileConfig('logs/logging.ini', disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 
@@ -40,7 +40,6 @@ async def leave_group(message: types.Message):
 
 @dp.callback_query_handler(state=Stater.member ,text='leave')
 async def send_leave(call: types.CallbackQuery):
-    
     group_name = MW.get_active_group(call.message.chat.id)
     logger.info('%s leave_group: %s',call.message.chat.id, group_name)
     MW.leave_group(call.message.chat.id, group_name)
@@ -69,10 +68,11 @@ async def send_timetable(message: types.Message):
     ]
     try:
         now_week = MW.get_week()
-        s = 'odd_week' if now_week[1]%2 else 'even_week'
         if message.text == '/now':
+            s = 'odd_week' if now_week[1]%2 else 'even_week'
             sh = MW.get_schedule(message.chat.id,now_week[2],s)
         elif message.text == '/tmr':
+            s = 'odd_week' if (now_week[1]+1 if (now_week[2]+1)==8 else now_week[1])%2 else 'even_week'
             sh = MW.get_schedule(message.chat.id,int((now_week[2]+1)%7),s)
         # elif '/day' in message.text:
         #     day = int(message.text[4:])
@@ -149,6 +149,7 @@ async def send_last_homework(message: types.Message):
             logger.info('%s learned homework',message.chat.id)
         else:
             hw = MW.last_hw(message.chat.id, message.text)
+            logger.info('%s learned homework',message.chat.id)
         if not hw:
             return await message.answer("Пока ДЗ нет :)")
         for h in list(reversed(hw)):
@@ -167,10 +168,22 @@ async def send_last_homework(message: types.Message):
 
 @dp.callback_query_handler(state=Stater.member, text_contains="del_hw")
 async def del_hw(call: types.CallbackQuery):
-    logger.info('%s deleted homework',message.chat.id) 
+    logger.info('%s deleted homework',call.message.chat.id) 
     MW.delete('homework', call.values['data'].split(':')[-1])
     await call.message.delete_reply_markup()
     await call.message.answer('ДЗ удалено.')
+
+
+@dp.message_handler(state='*')
+async def send_last_mail(message: types.Message):
+    await message.answer('/make_group\n\n/connect\n\n/group_list')
+
+
+
+
+
+
+
 
 # @dp.message_handler(commands = ['f'])
 # async def ork(message: types.Message):

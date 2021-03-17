@@ -1019,3 +1019,20 @@ NameError: name 'message' is not defined
 2021-03-17 02:06:30,556 handlers.member - INFO:553818543 found out the schedule
 2021-03-17 14:47:30,115 handlers.member - INFO:983872632 found out the schedule
 2021-03-17 14:47:35,688 handlers.member - INFO:983872632 found out the schedule
+2021-03-17 18:28:08,227 handlers.auth - INFO:1037171446 changed the group to: /help
+2021-03-17 18:28:15,999 handlers.auth - INFO:1037171446 changed the group to: ИБ 2 курс
+2021-03-17 18:28:18,011 handlers.member - INFO:1037171446 used the command /help
+2021-03-17 18:28:21,211 handlers.member - INFO:1037171446 found out the schedule
+2021-03-17 19:05:24,772 handlers.member - INFO:983872632 found out the schedule
+2021-03-17 20:30:13,972 handlers.member - INFO:553818543 used the command /help
+2021-03-17 20:30:21,408 handlers.member - INFO:553818543 used the command /subjects
+2021-03-17 20:31:46,211 handlers.headman - INFO:553818543 created a new homework without files
+2021-03-17 20:31:54,807 handlers.member - INFO:553818543 learned homework
+2021-03-17 20:31:56,953 handlers.member - INFO:553818543 deleted homework
+2021-03-17 20:32:21,848 handlers.headman - INFO:553818543 created a new homework without files
+2021-03-17 20:32:26,747 handlers.member - INFO:553818543 learned homework
+2021-03-17 20:35:43,041 handlers.auth - INFO:868841570 changed the group to: ИБ 2 курс
+2021-03-17 20:35:47,334 handlers.member - INFO:868841570 used the command /help
+2021-03-17 20:36:19,443 handlers.member - INFO:868841570 found out the schedule
+2021-03-17 20:36:32,198 handlers.member - INFO:868841570 used the command /subjects
+2021-03-17 20:38:47,997 handlers.headman - INFO:553818543 created a new homework without files

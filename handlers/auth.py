@@ -45,7 +45,7 @@ async def attach_state(message: types.Message):
         if message.text == '/connect':
             await Stater.connecting.set()
             group_list = MW.personal_groups(message.chat.id)
-            await message.answer("List of your groups:",reply_markup=connect_button(group_list))
+            await message.answer("Список ваших групп:",reply_markup=connect_button(group_list))
             await message.answer('Название группы:')
 
         if message.text == '/group_list':

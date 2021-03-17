@@ -47,7 +47,7 @@ async def give_permission(message: types.Message):
                             )
 
     else:
-        await message.answer('You not a headman')
+        await message.answer('Вы не староста.')
 
 
 @dp.message_handler(state=Stater.add_subjects)

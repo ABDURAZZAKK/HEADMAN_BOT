@@ -34,7 +34,7 @@ def get_help(chat_id):
 def get_personal_groups(member_id):
     """ Возврашает список групп участника """
     groups = MW.personal_groups(member_id)
-    answer_message = "Список групп:\n\n* " +\
+    answer_message = "Список ваших групп:\n\n* " +\
         "\n* ".join([c[0]+' - '+'староста.' if c[1] else 
                     c[0]+' - '+'участник.' for c in groups])
     return answer_message

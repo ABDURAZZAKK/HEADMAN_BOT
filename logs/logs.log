@@ -8,3 +8,258 @@
 2021-03-14 12:03:41,892 aiogram.dispatcher.dispatcher - INFO:Start polling.
 2021-03-14 12:03:56,558 handlers.auth - INFO:553818543 changed the group to: ИБ 2 курс
 2021-03-14 12:04:04,536 handlers.member - INFO:553818543 found out the schedule
+2021-03-16 17:04:47,529 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:04:48,709 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:04:48,709 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:06:00,096 handlers.auth - INFO:New member.
+2021-03-16 17:06:14,579 handlers.auth - INFO:553818543 changed the group to: иб
+2021-03-16 17:06:17,452 handlers.auth - INFO:553818543 changed the group to: cc
+2021-03-16 17:07:22,085 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:07:23,251 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:07:23,252 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:07:29,373 handlers.auth - INFO:553818543 changed the group to: cc
+2021-03-16 17:07:34,817 handlers.auth - INFO:553818543 created a new group: cc
+2021-03-16 17:07:41,559 handlers.member - INFO:553818543 used the command /group_name
+2021-03-16 17:07:54,142 handlers.auth - INFO:553818543 created a new group: kpcc
+2021-03-16 17:07:58,878 handlers.member - INFO:553818543 used the command /group_name
+2021-03-16 17:08:03,686 handlers.auth - INFO:553818543 changed the group to: cc
+2021-03-16 17:08:05,848 handlers.member - INFO:553818543 used the command /group_name
+2021-03-16 17:08:07,823 handlers.auth - INFO:553818543 used the command /group_list
+2021-03-16 17:10:16,389 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:10:17,552 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:10:17,552 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:29:53,556 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:29:54,719 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:29:54,720 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:30:01,875 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-9' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=NameError("name 'c' is not defined")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 50, in attach_state
+    await message.answer(c[0]+' - '+'староста.' if c[1] else
+NameError: name 'c' is not defined
+2021-03-16 17:30:55,431 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:30:56,596 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:30:56,596 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:34:53,235 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:34:54,400 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:34:54,401 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:34:56,876 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-17' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=TypeError("object str can't be used in 'await' expression")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 273, in process_update
+    return await self.callback_query_handlers.notify(update.callback_query)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 66, in call_connect
+    group_name = await call.values['data'].split(':')[-1]
+TypeError: object str can't be used in 'await' expression
+2021-03-16 17:35:28,413 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:35:29,604 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:35:29,604 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:35:33,370 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-17' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=NameError("name 'message' is not defined")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 273, in process_update
+    return await self.callback_query_handlers.notify(update.callback_query)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 70, in call_connect
+    await message.answer(f'Вы присоеденились к группе: {message.text}\n'
+NameError: name 'message' is not defined
+2021-03-16 17:35:41,846 handlers.member - INFO:553818543 used the command /group_name
+2021-03-16 17:36:33,052 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:36:34,215 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:36:34,215 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:36:47,063 handlers.member - INFO:553818543 used the command /help
+2021-03-16 17:36:50,895 handlers.member - INFO:553818543 used the command /group_name
+2021-03-16 17:38:34,358 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:38:35,526 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:38:35,526 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:38:40,335 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-9' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=TypeError("answer() missing 1 required positional argument: 'text'")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 50, in attach_state
+    await message.answer(reply_markup=connect_button(g[0]+' - '+'староста.' if g[1] else
+TypeError: answer() missing 1 required positional argument: 'text'
+2021-03-16 17:39:57,866 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:39:59,032 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:39:59,032 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:40:01,605 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-9' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=TypeError("answer() missing 1 required positional argument: 'text'")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 51, in attach_state
+    await message.answer(reply_markup=connect_button(text,g[0]))
+TypeError: answer() missing 1 required positional argument: 'text'
+2021-03-16 17:49:04,396 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:49:05,562 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:49:05,563 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:49:07,867 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-9' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=BadRequest("Can't parse inline keyboard button: inlinekeyboardbutton must be an object")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 48, in attach_state
+    await message.answer("Список ваших групп:",reply_markup=connect_button(group_list))
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\types\message.py", line 339, in answer
+    return await self.bot.send_message(
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\bot.py", line 318, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\base.py", line 208, in request
+    return await api.make_request(self.session, self.server, self.__token, method, data, files,
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\utils\exceptions.py", line 140, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Can't parse inline keyboard button: inlinekeyboardbutton must be an object
+2021-03-16 17:49:13,904 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-13' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=BadRequest("Can't parse inline keyboard button: inlinekeyboardbutton must be an object")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 48, in attach_state
+    await message.answer("Список ваших групп:",reply_markup=connect_button(group_list))
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\types\message.py", line 339, in answer
+    return await self.bot.send_message(
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\bot.py", line 318, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\base.py", line 208, in request
+    return await api.make_request(self.session, self.server, self.__token, method, data, files,
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\utils\exceptions.py", line 140, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Can't parse inline keyboard button: inlinekeyboardbutton must be an object
+2021-03-16 17:49:15,988 handlers.auth - INFO:553818543 changed the group to: /group_name
+2021-03-16 17:49:22,394 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-22' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=BadRequest("Can't parse inline keyboard button: inlinekeyboardbutton must be an object")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 48, in attach_state
+    await message.answer("Список ваших групп:",reply_markup=connect_button(group_list))
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\types\message.py", line 339, in answer
+    return await self.bot.send_message(
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\bot.py", line 318, in send_message
+    result = await self.request(api.Methods.SEND_MESSAGE, payload)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\base.py", line 208, in request
+    return await api.make_request(self.session, self.server, self.__token, method, data, files,
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\api.py", line 140, in make_request
+    return check_result(method, response.content_type, response.status, await response.text())
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\bot\api.py", line 115, in check_result
+    exceptions.BadRequest.detect(description)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\utils\exceptions.py", line 140, in detect
+    raise cls(description)
+aiogram.utils.exceptions.BadRequest: Can't parse inline keyboard button: inlinekeyboardbutton must be an object
+2021-03-16 17:56:16,986 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 17:56:18,155 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 17:56:18,155 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 17:56:28,737 asyncio - ERROR:Task exception was never retrieved
+future: <Task finished name='Task-9' coro=<Dispatcher._process_polling_updates() done, defined at d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:380> exception=TypeError("unsupported operand type(s) for +=: 'dict' and 'InlineKeyboardButton'")>
+Traceback (most recent call last):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 388, in _process_polling_updates
+    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 225, in process_updates
+    return await asyncio.gather(*tasks)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 246, in process_update
+    return await self.message_handlers.notify(update.message)
+  File "d:\Headman_bot\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
+    response = await handler_obj.handler(*args, **partial_data)
+  File "d:\Headman_bot\handlers\auth.py", line 48, in attach_state
+    await message.answer("Список ваших групп:",reply_markup=connect_button(group_list))
+  File "d:\Headman_bot\keyboards\choise_buttons.py", line 78, in connect_button
+    key_list+= InlineKeyboardButton(text=f'{text}', callback_data=f"connect:{g[0]}")
+TypeError: unsupported operand type(s) for +=: 'dict' and 'InlineKeyboardButton'
+2021-03-16 17:56:32,000 handlers.auth - INFO:553818543 changed the group to: /group_name
+2021-03-16 18:00:32,390 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:00:33,488 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:00:33,488 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 18:01:32,082 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:01:33,244 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:01:33,245 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 18:02:25,900 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:02:27,073 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:02:27,073 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 18:02:51,783 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:02:52,952 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:02:52,953 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 18:04:58,562 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:04:59,736 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:04:59,737 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 18:05:34,002 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:05:35,164 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:05:35,165 aiogram.dispatcher.dispatcher - INFO:Start polling.
+2021-03-16 18:06:33,817 aiogram - INFO:Bot: luhiBot [@Luhibot]
+2021-03-16 18:06:34,731 aiogram - WARNING:Updates were skipped successfully.
+2021-03-16 18:06:34,731 aiogram.dispatcher.dispatcher - INFO:Start polling.

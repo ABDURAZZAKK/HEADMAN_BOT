@@ -3,6 +3,7 @@ from states import Stater
 import MW
 import exceptions
 from .utils import *
+from keyboards.choise_buttons import connect_button
 import logging
 import logging.config
 
@@ -43,6 +44,8 @@ async def attach_state(message: types.Message):
 
         if message.text == '/connect':
             await Stater.connecting.set()
+            group_list = MW.personal_groups(message.chat.id)
+            await message.answer("Список ваших групп:",reply_markup=connect_button(group_list))
             await message.answer('Название группы:')
 
         if message.text == '/group_list':
@@ -52,6 +55,16 @@ async def attach_state(message: types.Message):
 
     else:
         await message.answer('Введите команду: /start')
+
+
+@dp.callback_query_handler(state=Stater.connecting ,text_contains='connect:')
+async def call_connect(call: types.CallbackQuery):
+    group_name = call.values['data'].split(':')[-1]
+    MW.connect(call.message.chat.id, group_name)
+    await Stater.member.set()
+    await call.message.answer(f'Вы присоеденились к группе: {group_name}\n'
+                             'Помощь: /help')
+    await call.message.delete_reply_markup()
 
 
 @dp.message_handler(state=Stater.auth)
@@ -77,12 +90,11 @@ async def connecting(message: types.Message):
     logger.info('%s changed the group to: %s', message.chat.id, message.text)
     if message.text in MW.group_list():
         MW.connect(message.chat.id, message.text)
-        MW.update_active_group(message.chat.id, message.text)
         await Stater.member.set()
         await message.answer(f'Вы присоеденились к группе: {message.text}\n'
                              'Помощь: /help')
     else:
-        await message.answer('Такой группы нет, попробуйте еще.')
+        await message.answer('Такой группы нет, попробуйте еще.\n Или создайте ее /make_group')
 
 
 @dp.message_handler(state=Stater.make_group)

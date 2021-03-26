@@ -2,3 +2,4 @@ venv
 # db\df.db
 __pycache__
 .env
+statistics

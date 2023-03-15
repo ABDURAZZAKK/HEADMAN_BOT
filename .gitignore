@@ -1,5 +1,8 @@
 venv
-# db\df.db
+logs/*.log
+db\df.db
 __pycache__
+.gitignore
 .env
 statistics
+
